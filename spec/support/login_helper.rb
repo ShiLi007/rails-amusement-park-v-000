@@ -9,7 +9,6 @@ module LoginHelper
     fill_in("user[happiness]", :with => "3")
     fill_in("user[nausea]", :with => "2")
     fill_in("user[tickets]", :with => "15")
-    fill_in("user[password]", :with => "password")
     click_button('Create User')
     expect(current_path).to eq('/users/1')
     expect(page).to have_content("Amy Poehler")
@@ -20,14 +19,7 @@ module LoginHelper
   end
 
   def user_login
-    @mindy = User.create(
-      name: "Mindy",
-      password: "password",
-      happiness: 3,
-      nausea: 2,
-      tickets: 10,
-      height: 50
-    )
+    @mindy = User.create(:name=>"Mindy", :happiness=>3, :nausea=>2, :tickets=>10, :height=>50)
     visit '/'
     click_link('Sign in')
     expect(current_path).to eq('/signin')
@@ -46,7 +38,9 @@ module LoginHelper
     click_link('Sign up')
     expect(current_path).to eq('/users/new')
     fill_in("user[name]", :with => "Walt Disney")
-    fill_in("user[password]", :with => "password")
+    fill_in("user[happiness]", :with => "5")
+    fill_in("user[nausea]", :with => "0")
+    #happiness and nausea caused errors with helpers when left blank.
     find(:css, "#user_admin").set(true)
     click_button('Create User')
     expect(current_path).to eq('/users/1')
@@ -55,19 +49,8 @@ module LoginHelper
   end
 
   def admin_login
-    @mindy = User.create(
-      name: "Mindy",
-      password: "password",
-      happiness: 3,
-      nausea: 2,
-      tickets: 10,
-      height: 50
-    )
-    @walt = User.create(
-      name: "Walt Disney",
-      password: "password",
-      admin: true
-    )
+    @mindy = User.create(:name=>"Mindy", :happiness=>3, :nausea=>2, :tickets=>10, :height=>50)
+    @walt = User.create(:name=>"Walt Disney", :admin=>true, :happiness=>3, :nausea=>2, :tickets=>10, :height=>50)
     visit '/'
     click_link('Sign in')
     expect(current_path).to eq('/signin')
